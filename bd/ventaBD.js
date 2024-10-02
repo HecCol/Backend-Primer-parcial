@@ -26,8 +26,8 @@ async function mostrarVentas() {
     const ventasValidas = [];
     ventas.forEach((venta) => {
         const venta1 = new Venta({ id: venta.id, ...venta.data() });
-        if (validarVenta(venta1)) { // Llamada correcta a validarVenta
-            ventasValidas.push(venta1);
+        if (validarVenta(venta1)) {
+            ventasValidas.push(venta1.getVenta); // Cambié de getProducto a getVenta
         }
     });
     console.log(ventasValidas);
@@ -40,7 +40,7 @@ async function buscarPorID(id) {
     const venta1 = new Venta({ id: venta.id, ...venta.data() });
     var ventaValida = null;
     if (validarVenta(venta1)) {
-        ventaValida = venta1;
+        ventaValida = venta1.getVenta; // Cambié de getProducto a getVenta
     }
     console.log(ventaValida);
     return ventaValida;
@@ -50,10 +50,10 @@ async function nuevaVenta(data) {
     const venta1 = new Venta(data);
     var ventaValida = false;
     if (validarVenta(venta1)) {
-        const idUsuValido = await validarIdUsu(venta1.idUsu);
-        const idProdValido = await validarIdProd(venta1.idProd);
+        const idUsuValido = await validarIdUsu(data.idUsu); // Corregí la referencia de usuario
+        const idProdValido = await validarIdProd(data.idProd); // Corregí la referencia de producto
         if (idUsuValido && idProdValido) {
-            await ventasBD.doc().set(venta1);
+            await ventasBD.doc().set(venta1.getVenta); // Cambié de getProducto a getVenta
             ventaValida = true;
         } else {
             console.log(idUsuValido ? "ID de producto no encontrado" : "ID de usuario no encontrado");
@@ -65,7 +65,7 @@ async function nuevaVenta(data) {
 async function estadoVenta(id) {
     const venta = await buscarPorID(id);
     if (!venta) return;
-    await ventasBD.doc(id).update({ estado: "Cancelada" }); // Estado "Cancelada" como string
+    await ventasBD.doc(id).update({ estado: "Cancelada" });
     console.log("Venta cancelada.");
 }
 
