@@ -5,10 +5,12 @@ admin.initializeApp({
 });
 
 const proyecto = admin.firestore();
-const usuarios = proyecto.collection("miejemploBD");
+const usuarios = proyecto.collection("Usuarios");
 const productos = proyecto.collection("Productos");
+const ventas = proyecto.collection("Ventas");
 
 module.exports={
     usuarios,
-    productos
+    productos,
+    ventas
 }

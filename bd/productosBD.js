@@ -22,7 +22,7 @@ async function mostrarProductos() {
     return productosValidos;
 }
 
-async function buscarPorIDP(id) {
+async function buscarPorID(id) {
     const producto = await productosBD.doc(id).get();
     const producto1 = new Producto({ id: producto.id, ...producto.data() });
     var productoValido;
@@ -45,7 +45,7 @@ async function nuevoProducto(data) {
 }
 
 async function borrarProducto(id) {
-    var productoValido = await buscarPorIDP(id);  // Cambié buscarPorID a buscarPorIDP
+    var productoValido = await buscarPorID(id);  // Cambié buscarPorID a buscarPorIDP
     var productoBorrado = false;
     if (productoValido) {
         await productosBD.doc(id).delete();
@@ -58,5 +58,5 @@ module.exports = {
     mostrarProductos,
     nuevoProducto,
     borrarProducto,
-    buscarPorIDP
+    buscarPorID
 };

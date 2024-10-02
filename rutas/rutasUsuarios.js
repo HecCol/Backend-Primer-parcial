@@ -1,19 +1,15 @@
 var rutas = require("express").Router();
 //var {Router} = require("express"); - alternativa
 var {mostrarUsuarios, nuevoUsuario, borrarUsuario, buscarPorID} = require("../bd/usuariosBD");
-var {mostrarProductos, nuevoProducto, borrarProducto, buscarPorIDP} = require("../bd/productosBD");
 
 rutas.get("/", async (req, res) => {
     //res.send("hola estas en raiz");
     var usuariosValidos = await mostrarUsuarios();
-    var productosValidos = await mostrarProductos();
-    console.log(productosValidos);
     console.log(usuariosValidos);
     
     // Corregido: envía ambos resultados en un solo objeto JSON
     res.json({
-        usuarios: usuariosValidos,
-        productos: productosValidos
+        usuarios: usuariosValidos
     });
 });
 
