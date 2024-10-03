@@ -1,12 +1,12 @@
 var rutas = require("express").Router();
-var {mostrarProductos, nuevoProducto, borrarProducto, buscarPorID} = require("../bd/productosBD");
+var {mostrarVentas, nuevaVenta, cambiarEstatus, buscarPorID} = require("../bd/ventasBD");
 
-rutas.get("/mostrarProductos", async (req, res) => {
-    var productosValidos = await mostrarProductos();
-    console.log(usuariosValidos);
+rutas.get("/mostrarVentas", async (req, res) => {
+    var ventasValidas = await mostrarVentas();
+    console.log(ventasValidas);
     
     res.json({
-        productos: productosValidos
+        ventas: ventasValidas
     });
 });
 
@@ -16,14 +16,14 @@ rutas.get("/buscarPorIdP/:id", async (req, res) => {
     res.json(productoValido);
 });
 
-rutas.delete("/borrarProducto/:id", async (req, res) => {
-    var productoBorrado = await borrarProducto(req.params.id);
-    res.json(productoBorrado); // Aquí estaba mal escrito también, corregí de usuarioBorrado a productoBorrado
+rutas.delete("/cambiarEstatus/:id", async (req, res) => {
+    var estatusCambiado = await cambiarEstatus(req.params.id);
+    res.json(estatusCambiado); // Aquí estaba mal escrito también, corregí de usuarioBorrado a productoBorrado
 });
 
-rutas.post("/nuevoProducto", async (req, res) => {
-    var productoValido = await nuevoProducto(req.body);
-    res.json(productoValido);
+rutas.post("/nuevaVenta", async (req, res) => {
+    var ventasValidas = await nuevaVenta(req.body);
+    res.json(ventasValidas);
 });
 
 module.exports = rutas;

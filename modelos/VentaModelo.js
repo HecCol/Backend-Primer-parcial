@@ -30,7 +30,7 @@ class Venta {
     }
 
     set estatus(estatus) {
-        this._idProd = idProd;
+        this._estatus = estatus;
     }
 
     // Getters

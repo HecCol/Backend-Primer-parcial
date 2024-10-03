@@ -36,7 +36,7 @@ async function buscarPorID(id) {
 
 async function nuevaVenta(data) {
     const venta1 = new Venta(data);
-    console.log(producto1.getProducto);  // Cambié usuario1 a producto1
+    console.log(venta1.getVenta);  // Cambié usuario1 a producto1
     var ventasValidas = false;
     if (validarVenta(venta1.getVenta)) {  // Cambié validarDatos a validarProducto
         await VentasBD.doc().set(venta1.getVenta);
@@ -56,8 +56,8 @@ async function cambiarEstatus(id) {
 }
 
 module.exports = {
-    mostrarProductos,
-    nuevoProducto,
-    borrarProducto,
+    mostrarVentas,
+    nuevaVenta,
+    cambiarEstatus,
     buscarPorID
 };
