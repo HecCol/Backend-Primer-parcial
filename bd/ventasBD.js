@@ -36,10 +36,10 @@ async function buscarPorID(id) {
 
 async function nuevaVenta(data) {
     const venta1 = new Venta(data);
-    console.log(venta1.getVenta);  // Cambié usuario1 a producto1
+    console.log(venta1.getVenta);
     var ventasValidas = false;
-    if (validarVenta(venta1.getVenta)) {  // Cambié validarDatos a validarProducto
-        await VentasBD.doc().set(venta1.getVenta);
+    if (validarVenta(venta1.getVenta)) {
+        await ventasBD.doc().set(venta1.getVenta);  // Cambié VentasBD a ventasBD
         ventasValidas = true;
     }
     return ventasValidas;
