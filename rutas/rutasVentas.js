@@ -16,7 +16,7 @@ rutas.get("/buscarPorIdP/:id", async (req, res) => {
     res.json(productoValido);
 });
 
-rutas.delete("/cambiarEstatus/:id", async (req, res) => {
+rutas.post("/cambiarEstatus/:id", async (req, res) => {
     var estatusCambiado = await cambiarEstatus(req.params.id);
     res.json(estatusCambiado); // Aquí estaba mal escrito también, corregí de usuarioBorrado a productoBorrado
 });
