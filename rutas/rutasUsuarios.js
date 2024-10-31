@@ -1,16 +1,19 @@
 var rutas = require("express").Router();
 //var {Router} = require("express"); - alternativa
-var {mostrarUsuarios, nuevoUsuario, borrarUsuario, buscarPorID} = require("../bd/usuariosBD");
+var {mostrarUsuarios, nuevoUsuario, borrarUsuario, buscarPorID, editarUsuario, login} = require("../bd/usuariosBD");
 
-rutas.get("/", async (req, res) => {
+rutas.post("/login",async(req,res)=>{
+    const sesionValida = await login(req.body.usuario,req.body.password);
+    res.json(req.body);
+})
+
+rutas.get("/mostrar",async(req,res) => {
     //res.send("hola estas en raiz");
     var usuariosValidos = await mostrarUsuarios();
     console.log(usuariosValidos);
     
     // Corregido: envía ambos resultados en un solo objeto JSON
-    res.json({
-        usuarios: usuariosValidos
-    });
+    res.json(usuariosValidos);
 });
 
 rutas.get("/buscarPorId/:id", async (req, res) => {
@@ -28,20 +31,10 @@ rutas.post("/nuevoUsuario", async (req, res) => {
     res.json(usuarioValido);
 });
 
-// Ruta de productos 
-rutas.get("/buscarPorIdP/:id", async (req, res) => {
-    var productoValido = await buscarPorIDP(req.params.id);
-    res.json(productoValido);
-});
-
-rutas.delete("/borrarProducto/:id", async (req, res) => {
-    var productoBorrado = await borrarProducto(req.params.id);
-    res.json(productoBorrado); // Aquí estaba mal escrito también, corregí de usuarioBorrado a productoBorrado
-});
-
-rutas.post("/nuevoProducto", async (req, res) => {
-    var productoValido = await nuevoProducto(req.body);
-    res.json(productoValido);
+// Nueva ruta para editar un usuario
+rutas.put("/editarUsuario/:id", async (req, res) => {
+    var usuarioEditado = await editarUsuario(req.params.id, req.body);
+    res.json(usuarioEditado);
 });
 
 module.exports = rutas;

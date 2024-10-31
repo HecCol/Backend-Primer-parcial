@@ -3,7 +3,7 @@ var {mostrarProductos, nuevoProducto, borrarProducto, buscarPorID} = require("..
 
 rutas.get("/mostrarProductos", async (req, res) => {
     var productosValidos = await mostrarProductos();
-    console.log(usuariosValidos);
+    console.log(productosValidos);
     
     res.json({
         productos: productosValidos

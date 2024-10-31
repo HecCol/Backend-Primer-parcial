@@ -3,8 +3,8 @@ const Venta = require("../modelos/VentaModelo");
 const {id} = require("../bd/usuariosBD");
 
 function validarVenta(venta) {
-    var valido = false;
-    if (venta.fecha != undefined && venta.hora != undefined && venta.idUsu != undefined && venta.idProd != undefined && venta.estatus != undefined) {
+    let valido = false;
+    if (venta.fecha !== undefined && venta.hora !== undefined && venta.idUsu !== undefined && venta.idProd !== undefined && venta.estatus !== undefined) {
         valido = true;
     }
     return valido;
@@ -35,9 +35,13 @@ async function buscarPorID(id) {
 }
 
 async function nuevaVenta(data) {
+    // Asigna automáticamente el valor "venido" si no se especifica
+    data.estatus = data.estatus || "Venido";
+    
     const venta1 = new Venta(data);
     console.log(venta1.getVenta);
-    var ventasValidas = false;
+    
+    let ventasValidas = false;
     if (validarVenta(venta1.getVenta)) {
         await ventasBD.add(venta1.getVenta);
         ventasValidas = true;
@@ -50,7 +54,7 @@ async function cambiarEstatus(id) {
     var estatusCambiado = false;
     if (ventasValidas) {
         try {
-            await ventasBD.doc(id).update({ estatus: "cancelado" });
+            await ventasBD.doc(id).update({ estatus: "Cancelado" });
             estatusCambiado = true;
         } catch (error) {
             console.error("Error al actualizar el estatus:", error);  // Agrega manejo de errores
