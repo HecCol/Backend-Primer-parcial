@@ -10,10 +10,30 @@ function validarDatos(usuario){
     return valido;
 }
 
-async function login(usuario,password){
-    console.log(usuario);
-    const usuarioCorrecto = await usuariosBD.where("usuario","==",usuario).get();
-    console.log(usuarioCorrecto.data);
+async function login(req, usuario, password){
+    //console.log(usuario);
+    //console.log(password);
+    var user={
+        usuario:"anonimo",
+        tipoUsuario:"sin acceso"
+    }
+    const usuariosCorrectos = await usuariosBD.where("usuario","==",usuario).get();
+    usuariosCorrectos.forEach(usu=>{
+        //console.log(user.data());
+        const usuarioCorrecto=validarPassword(password,usu.data().password,usu.data().salt);
+        if(usuarioCorrecto){
+            user.usuario=usu.data().usuario;
+            if(usu.data().tipoUsuario=="usuario"){
+                req.session.usuario="usuario";
+                user.tipoUsuario=req.session.usuario;
+            }
+            else if(usu.data().tipoUsuario=="admin"){
+                req.session.Usuario="admin";
+                user.tipoUsuario=req.session.admin;
+            }
+        }
+    });
+    return user;
 }
 
 async function mostrarUsuarios(){
@@ -65,58 +85,10 @@ async function borrarUsuario(id){
     return usuarioBorrado;
 }
 
-async function editarUsuario(id, nuevosDatos) {
-    // Validar si existe el usuario
-    const usuarioExistente = await buscarPorID(id);
-    if (!usuarioExistente) {
-        console.log(`Usuario con ID ${id} no encontrado.`);
-        return false;
-    }
-
-    // Validar datos antes de realizar la actualización
-    if (nuevosDatos.password) {
-        const { salt, hash } = encriptarPassword(nuevosDatos.password);
-        nuevosDatos.password = hash;
-        nuevosDatos.salt = salt;
-    }
-
-    // Crear una instancia de Usuario con los nuevos datos
-    const usuarioActualizado = new Usuario({ id, ...usuarioExistente, ...nuevosDatos });
-    if (validarDatos(usuarioActualizado.getUsuario)) {
-        await usuariosBD.doc(id).update(usuarioActualizado.getUsuario);
-        console.log(`Usuario con ID ${id} actualizado correctamente.`);
-        return true;
-    }
-
-    console.log("Datos no válidos para actualización.");
-    return false;
-}
-
-
 module.exports={
     mostrarUsuarios,
     nuevoUsuario,
     borrarUsuario,
     buscarPorID,
-    editarUsuario,
     login
 };
-
-//borrarUsuario("44A6rb4cnVr2jr4SwHCA");
-
-//Revisar cuando si existe el usuario, pero el usuario es incorrecto
-//borrarUsuario("xfCJ4arzH6Bhx6EAuu3t");
-
-/*data={
-}
-async function prueba(){
-    console.log(await nuevoUsuario(data));
-}
-
-prueba();*/
-
-
-//buscarPorID("200");
-//buscarPorID("xfCJ4arzH6Bhx6EAuu3t");
-
-//mostrarUsuarios();

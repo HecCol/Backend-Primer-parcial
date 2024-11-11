@@ -3,8 +3,8 @@ var rutas = require("express").Router();
 var {mostrarUsuarios, nuevoUsuario, borrarUsuario, buscarPorID, editarUsuario, login} = require("../bd/usuariosBD");
 
 rutas.post("/login",async(req,res)=>{
-    const sesionValida = await login(req.body.usuario,req.body.password);
-    res.json(req.body);
+    const usuario = await login(req, req.body.usuario,req.body.password);
+    res.json(usuario);
 })
 
 rutas.get("/mostrar",async(req,res) => {

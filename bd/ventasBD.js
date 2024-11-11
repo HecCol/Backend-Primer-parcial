@@ -1,6 +1,6 @@
 const ventasBD = require("./conexion").ventas;
 const Venta = require("../modelos/VentaModelo");
-const {id} = require("../bd/usuariosBD");
+const { id } = require("../bd/usuariosBD");
 
 function validarVenta(venta) {
     let valido = false;
@@ -23,24 +23,25 @@ async function mostrarVentas() {
     return ventasValidas;
 }
 
+// Función para buscar una venta por ID
 async function buscarPorID(id) {
     const venta = await ventasBD.doc(id).get();
-    const venta1 = new Venta({ id: venta.id, ...venta.data() });
-    var ventasValidas;
-    if (validarVenta(venta1)) {  // Usa 'venta1' si 'getVenta' no es un método
-        ventasValidas = venta1;   // O almacena el objeto completo si es necesario
+    console.log(venta.id);
+    if (!venta.exists) {
+        console.log(`Venta con ID ${id} no encontrada.`);
+        return null;
     }
-    console.log(ventasValidas);
-    return ventasValidas;
+    const venta1 = new Venta({ id: venta.id, ...venta.data() });
+    return validarVenta(venta1.getVenta) ? venta1.getVenta : null;
 }
 
 async function nuevaVenta(data) {
     // Asigna automáticamente el valor "venido" si no se especifica
     data.estatus = data.estatus || "Venido";
-    
+
     const venta1 = new Venta(data);
     console.log(venta1.getVenta);
-    
+
     let ventasValidas = false;
     if (validarVenta(venta1.getVenta)) {
         await ventasBD.add(venta1.getVenta);
@@ -63,9 +64,26 @@ async function cambiarEstatus(id) {
     return estatusCambiado;
 }
 
+// Función para borrar una venta por ID
+async function borrarVenta(id) {
+    const ventaValida = await buscarPorID(id);
+    if (!ventaValida) {
+        console.log(`No se puede borrar. Venta con ID ${id} no encontrada.`);
+        return false;
+    }
+    try {
+        await ventasBD.doc(id).delete();
+        return true;
+    } catch (error) {
+        console.error("Error al borrar la venta:", error);
+        return false;
+    }
+}
+
 module.exports = {
     mostrarVentas,
     nuevaVenta,
     cambiarEstatus,
-    buscarPorID
+    buscarPorID,
+    borrarVenta
 };

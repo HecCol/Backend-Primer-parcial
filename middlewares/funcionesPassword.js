@@ -14,8 +14,8 @@ function encriptarPassword(password){
 }
 
 function validarPassword(password,hash,salt){
-    const hashValidar = crypto.scryptSync(password,salt,100,64,"sha512").toString("hex");
-    return hashValidar=hash;
+    const hashValidar = crypto.scryptSync(password,salt,10,64,"sha512").toString("hex");
+    return hashValidar == hash;
 
 }
 

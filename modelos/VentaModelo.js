@@ -1,6 +1,7 @@
 class Venta {
     constructor(data) {
         this.id = data.id;
+        this.id = data.id;
         this.fecha = data.fecha;
         this.hora = data.hora; // Aquí el setter ya estará funcionando.
         this.idUsu = data.idUsu;
